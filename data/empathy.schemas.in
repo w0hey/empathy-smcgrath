@@ -449,6 +449,20 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/conversation/enable_logging</key>
+      <applyto>/apps/empathy/conversation/enable_logging</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Keep logs of conversations</short>
+        <long>
+        Whether or not Empathy should keep log of conversations with your contacts.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/empathy/hints/close_main_window</key>
       <applyto>/apps/empathy/hints/close_main_window</applyto>
       <owner>empathy</owner>

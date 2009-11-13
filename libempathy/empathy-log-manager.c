@@ -44,6 +44,7 @@
 typedef struct
 {
   GList *stores;
+  gboolean enabled;
 } EmpathyLogManagerPriv;
 
 G_DEFINE_TYPE (EmpathyLogManager, empathy_log_manager, G_TYPE_OBJECT);
@@ -85,6 +86,7 @@ log_manager_constructor (GType type,
 
       priv->stores = g_list_append (priv->stores,
           g_object_new (EMPATHY_TYPE_LOG_STORE_EMPATHY, NULL));
+      priv->enabled = TRUE;
     }
 
   return retval;
@@ -137,6 +139,9 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
   g_return_val_if_fail (EMPATHY_IS_MESSAGE (message), FALSE);
 
   priv = GET_PRIV (manager);
+
+  if (!priv->enabled)
+    return TRUE;
 
   for (l = priv->stores; l; l = g_list_next (l))
     {
@@ -452,4 +457,16 @@ empathy_log_manager_observe (EmpathyLogManager *log_manager,
 {
   g_signal_connect (dispatcher, "observe",
       G_CALLBACK (log_manager_dispatcher_observe_cb), log_manager);
+}
+
+void
+empathy_log_manager_set_enabled (EmpathyLogManager *log_manager,
+                                 gboolean          enabled)
+{
+  EmpathyLogManagerPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_LOG_MANAGER (log_manager));
+
+  priv = GET_PRIV (log_manager);
+  priv->enabled = enabled;
 }

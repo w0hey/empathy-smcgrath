@@ -97,6 +97,8 @@ gchar *empathy_log_manager_get_date_readable (const gchar *date);
 void empathy_log_manager_search_hit_free (EmpathyLogSearchHit *hit);
 void empathy_log_manager_observe (EmpathyLogManager *log_manager,
     EmpathyDispatcher *dispatcher);
+void empathy_log_manager_set_enabled (EmpathyLogManager *log_manager,
+    gboolean enabled);
 
 G_END_DECLS
 

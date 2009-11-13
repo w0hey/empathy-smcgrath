@@ -334,6 +334,19 @@ create_salut_account_am_ready_cb (GObject *source_object,
 }
 
 static void
+enable_logging_notify_cb (EmpathyConf *conf,
+                         const gchar *key,
+                         gpointer     user_data)
+{
+  EmpathyLogManager *log_manager = user_data;
+  gboolean          enable_logging;
+
+  if (empathy_conf_get_bool (conf, key, &enable_logging)) {
+    empathy_log_manager_set_enabled (log_manager, enable_logging);
+  }
+}
+
+static void
 create_salut_account_if_needed (EmpathyConnectionManagers *managers)
 {
   TpAccountManager *manager;
@@ -1013,6 +1026,9 @@ main (int argc, char *argv[])
   /* Logging */
   log_manager = empathy_log_manager_dup_singleton ();
   empathy_log_manager_observe (log_manager, dispatcher);
+
+  enable_logging_notify_cb (empathy_conf_get (), EMPATHY_PREFS_CHAT_ENABLE_LOGGING, log_manager);
+  empathy_conf_notify_add (empathy_conf_get (), EMPATHY_PREFS_CHAT_ENABLE_LOGGING, enable_logging_notify_cb, log_manager);
 
   chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
   empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
